@@ -1,0 +1,121 @@
+import autores.*
+import empresa.*
+import pedidos.*
+import sucursales.*
+import remeras.*
+
+
+describe "Tests de Remeras"{
+	
+	var disney = new Autor(precioDerechoDeAutor = 100, convenioConNosotros = false)
+	var remeraFrozen = new Sublimada(ancho = 10, alto = 15, talle =42, autor = disney)
+	var remeraLisa = new Lisa(talle = 42, color = "gris")
+	var flores = new Sucursal(minimoParaDescuento = 6)	
+	var avellaneda = new Sucursal(minimoParaDescuento = 3)
+	var pedido1 = new Pedido(color = "gris", talle = 42, tipoDeRemera = remeraLisa, cantidad = 5, sucursal = flores)
+	var pedido2 = new Pedido(color = "gris", talle = 42, tipoDeRemera = remeraLisa, cantidad = 5, sucursal = avellaneda)	
+	var pedidoDisney = new Pedido (tipoDeRemera = remeraFrozen, cantidad = 4, sucursal = flores)
+
+test "Remera de disney sublimada"{
+	
+	assert.equals(275,remeraFrozen.precio())
+	
+	
+}
+
+test "Pedido en sucursal de Flores"{
+	
+	empresa.agregarPedido(pedido1)
+	
+	assert.equals(500, pedido1.precioFinal())
+	
+}
+
+test "Idem anterior pero en sucursal Avellaneda"{
+	
+	empresa.agregarPedido(pedido2)
+	
+	assert.equals(450, pedido2.precioFinal())
+	
+}
+
+test "Pedido de 4 remeras de frozen con convenio de Disney en flores"{
+
+	disney.convenioConNosotros(true)
+	empresa.agregarPedido(pedidoDisney)
+	
+	assert.equals(1100, pedidoDisney.precioFinal())
+	
+}
+
+test "Idem anterior pero en avellaneda"{
+	
+	disney.convenioConNosotros(true)
+	pedidoDisney.sucursal(avellaneda)
+	empresa.agregarPedido(pedidoDisney)
+	
+	assert.equals(880, pedidoDisney.precioFinal())
+}
+
+test "Idem anterior, en avellaneda pero sin convenio"{
+	
+	disney.convenioConNosotros(false)
+	pedidoDisney.sucursal(avellaneda)
+	empresa.agregarPedido(pedidoDisney)
+	
+	assert.equals(990, pedidoDisney.precioFinal())
+	
+}
+
+test "Total Recaudado por la sucursal de Flores"{
+	
+	empresa.agregarPedido(pedido1)
+	empresa.agregarPedido(pedidoDisney)
+	
+	assert.equals(1600, flores.totalRecaudado(empresa))
+	
+	
+}
+
+test "Total recaudado por la sucursal de Avellaneda" {
+	empresa.agregarPedido(pedido2)
+	pedidoDisney.sucursal(avellaneda)
+	empresa.agregarPedido(pedidoDisney)
+	
+	assert.equals(1440, flores.totalRecaudado(empresa))
+	
+}
+
+test "Total recaudado por la empresa"{
+	
+	
+	empresa.agregarPedido(pedido1)
+	empresa.agregarPedido(pedido2)
+	empresa.agregarSucursal(flores)
+	empresa.agregarSucursal(avellaneda)
+	
+	
+	assert.equals(1900, empresa.totalRecaudado())
+	
+	
+}
+
+test "El pedido mas caro de la empresa"{
+	
+	empresa.agregarPedido(pedido1)
+	empresa.agregarPedido(pedido2)
+	
+	assert.equals([pedido1], empresa.elPedidoMasCaro())
+	
+	
+}
+
+test "Cantidad de pedidos de color gris"{
+	
+	empresa.agregarPedido(pedido1)
+	empresa.agregarPedido(pedido2)
+	
+	assert.equals(2, empresa.cantidadDePedidosDeUnColor("gris"))
+	
+}	
+}
