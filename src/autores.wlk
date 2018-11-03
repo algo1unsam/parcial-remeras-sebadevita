@@ -1,11 +1,11 @@
 class Autor {
-	
-	
+
 	var property precioDerechoDeAutor = null
 	var property convenioConNosotros = null
-	
-method tieneConvenio(){
-	return convenioConNosotros
-}	
-	
+
+	method tieneConvenio() {
+		return convenioConNosotros
+	}
+
 }
+
