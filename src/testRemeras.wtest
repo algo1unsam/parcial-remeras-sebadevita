@@ -1,5 +1,5 @@
 import autores.*
-import empresa.*
+import industria.*
 import pedidos.*
 import sucursales.*
 import remeras.*

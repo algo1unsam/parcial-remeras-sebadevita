@@ -1,5 +1,5 @@
 import remeras.*
-import empresa.*
+import industria.*
 import autores.*
 
 class Pedido {
